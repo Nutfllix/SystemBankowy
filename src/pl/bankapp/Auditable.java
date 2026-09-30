@@ -1,16 +1,15 @@
 package pl.bankapp;
 
 /**
- * Interfejs reprezentujący komponenty, które mogą poddać się procedurze audytu.
- * Obiekty implementujące ten interfejs potrafią zarejestrować swój bieżący stan
- * za pomocą dostarczonego loggera transakcji.
+ * interfejs dla rzeczy, które można przetestować w audycie.
+ * obiekty potrafią zapisać swój stan przez loggera.
  */
 public interface Auditable {
 
     /**
-     * Przeprowadza audyt obiektu i rejestruje jego aktualny stan za pomocą loggera.
+     * robi audyt obiektu i zapisuje stan w loggerze.
      *
-     * @param logger logger służący do zapisu informacji z audytu (może być null)
+     * @param logger logger do zapisu info z audytu (może być null)
      */
     void audit(TransactionLogger logger);
 }

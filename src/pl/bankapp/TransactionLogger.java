@@ -1,23 +1,21 @@
 package pl.bankapp;
 
 /**
- * Odpowiada za rejestrowanie i logowanie zdarzeń, komunikatów informacyjnych oraz ostrzeżeń
- * w trakcie trwania sesji aplikacji bankowej.
- * Implementuje interfejs {@link AutoCloseable}, co umożliwia automatyczne zwalnianie zasobów
- * (np. w blokach try-with-resources).
+ * odpowiada za zapisywanie logów, info i ostrzeżeń w trakcie działania aplikacji.
+ * implementuje {@link AutoCloseable}, wiec działa automatycznie w try-with-resources.
  */
 public class TransactionLogger implements AutoCloseable {
 
-    /** Nazwa bieżącej sesji logowania. */
+    /** nazwa aktualnej sesji logowania. */
     private final String sessionName;
 
-    /** Flaga określająca, czy logger jest aktualnie otwarty i gotowy do pracy. */
+    /** flaga czy logger jest otwarty i działa. */
     private boolean open = true;
 
     /**
-     * Tworzy i inicjalizuje nową sesję loggera transakcji.
+     * tworzy nową sesje loggera.
      *
-     * @param sessionName nazwa sesji logowania
+     * @param sessionName nazwa sesji
      */
     public TransactionLogger(String sessionName) {
         this.sessionName = sessionName;
@@ -25,10 +23,10 @@ public class TransactionLogger implements AutoCloseable {
     }
 
     /**
-     * Rejestruje standardowy komunikat informacyjny.
+     * zapisuje zwykłą wiadomosc informacyjną.
      *
-     * @param msg treść wiadomości do zapisu
-     * @throws IllegalStateException jeśli logger został już zamknięty
+     * @param msg treść wiadomości
+     * @throws IllegalStateException jeśli logger jest już zamknięty
      */
     public void log(String msg) {
         if (!open) throw new IllegalStateException("Logger jest zamknięty.");
@@ -36,10 +34,10 @@ public class TransactionLogger implements AutoCloseable {
     }
 
     /**
-     * Rejestruje komunikat ostrzegawczy (np. odmowa wykonania operacji).
+     * zapisuje ostrzeżenie (np. jak cos poszło nie tak).
      *
-     * @param msg treść ostrzeżenia do zapisu
-     * @throws IllegalStateException jeśli logger został już zamknięty
+     * @param msg treść ostrzeżenia
+     * @throws IllegalStateException jeśli logger jest już zamknięty
      */
     public void warn(String msg) {
         if (!open) throw new IllegalStateException("Logger jest zamknięty.");
@@ -47,8 +45,8 @@ public class TransactionLogger implements AutoCloseable {
     }
 
     /**
-     * Zamyka sesję loggera i zwalnia zajmowane przez niego zasoby.
-     * Po wywołaniu tej metody ponowne próby logowania spowodują rzucenie wyjątku.
+     * zamyka logger i zwalnia zasoby.
+     * po zamknięciu nie da sie już nic zapisać.
      */
     @Override
     public void close() {

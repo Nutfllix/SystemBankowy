@@ -1,21 +1,21 @@
 package pl.bankapp;
 
 /**
- * Reprezentuje konto oszczędnościowe, które dziedziczy po klasie {@link Account}.
- * Konto to generuje zysk w postaci comiesięcznych odsetek naliczanych na podstawie rocznej stopy procentowej.
+ * reprezentuje konto oszczędnościowe, które dziedziczy po {@link Account}.
+ * zarabia na siebie dzięki comiesięcznym odsetkom z rocznego oprocentowania.
  */
 public class SavingsAccount extends Account {
 
-    /** Roczna stopa procentowa (np. 0.02 oznacza 2% w skali roku). */
+    /** roczna stopa procentowa (np. 0.02 to 2%). */
     private final double annualInterestRate;
 
     /**
-     * Tworzy nowe konto oszczędnościowe o określonym właścicielu, saldzie początkowym oraz rocznej stopie procentowej.
+     * tworzy nowe konto oszczędnościowe z właścicielem, saldem startowym i oprocentowaniem.
      *
-     * @param owner              nazwa właściciela konta (nie może być pusta ani null)
-     * @param initialBalance     początkowa kwota na koncie (nie może być ujemna)
-     * @param annualInterestRate roczna stopa procentowa (nie może być ujemna)
-     * @throws IllegalArgumentException jeśli roczna stopa procentowa jest ujemna (walidacja właściciela i salda odbywa się w klasie bazowej)
+     * @param owner nazwa właściciela (nie może być pusta ani null)
+     * @param initialBalance początkowa kasa na koncie (nie może być ujemna)
+     * @param annualInterestRate stopa procentowa (nie może być ujemna)
+     * @throws IllegalArgumentException jeśli stopa procentowa jest ujemna
      */
     public SavingsAccount(String owner, double initialBalance, double annualInterestRate) {
         super(owner, initialBalance);
@@ -24,11 +24,10 @@ public class SavingsAccount extends Account {
     }
 
     /**
-     * Przetwarza rozliczenie miesięczne dla konta oszczędnościowego.
-     * Oblicza miesięczną stopę procentową (dzieląc roczną stopę przez 12),
-     * nalicza odsetki od aktualnego salda, aktualizuje stan konta oraz rejestruje zdarzenie w loggerze.
+     * przetwarza rozliczenie miesieczne dla konta oszczędnościowego.
+     * dzieli roczne oprocentowanie na 12 miesiecy, nalicza odsetki do salda i loguje wynik.
      *
-     * @param logger logger rejestrujący przebieg operacji miesięcznych (może być null)
+     * @param logger logger do zapisu operacji miesięcznych (może być null)
      */
     @Override
     public void processMonth(TransactionLogger logger) {

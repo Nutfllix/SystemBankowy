@@ -1,26 +1,26 @@
 package pl.bankapp;
 
 /**
- * Klasa abstrakcyjna reprezentująca ogólne konto bankowe w systemie.
- * Zapewnia podstawową funkcjonalność obsługi salda, wpłat, wypłat, audytu
- * oraz operacji miesięcznych. Implementuje interfejs {@link Auditable}.
+ * klasa abstrakcyjna reprezentujaca ogólne konto bankowe.
+ * odpowiada za saldo, wpłaty, wypłaty, audyt oraz operacje miesięczne.
+ * implementuje interfejs {@link Auditable}.
  *
- * <p>Każde konto musi posiadać przypisanego właściciela oraz nieujemne saldo początkowe.</p>
+ * <p>każde konto musi miec właściciela i nieujemne saldo startowe.</p>
  */
 public abstract class Account implements Auditable {
 
-    /** Właściciel konta. */
+    /** właściciel konta. */
     private final String owner;
 
-    /** Aktualne saldo na koncie. */
+    /** aktualne saldo na koncie. */
     protected double balance;
 
     /**
-     * Tworzy nowe konto bankowe o określonym właścicielu i saldzie początkowym.
+     * tworzy nowe konto o podanym właścielu i saldzie początkowym.
      *
-     * @param owner nazwa właściciela konta (nie może być pusta ani null)
-     * @param initialBalance początkowa kwota na koncie (nie może być ujemna)
-     * @throws IllegalArgumentException jeśli właściciel jest pusty/null lub saldo początkowe jest ujemne
+     * @param owner nazwa właściciela (nie może być pusta ani null)
+     * @param initialBalance początkowa kasa na koncie (nie może być ujemna)
+     * @throws IllegalArgumentException jeśli właściciel jest pusty lub saldo na minusie
      */
     public Account(String owner, double initialBalance) {
         if (owner == null || owner.isBlank()) {
@@ -34,11 +34,11 @@ public abstract class Account implements Auditable {
     }
 
     /**
-     * Dokonuje wpłaty określonej kwoty na konto.
+     * wpłaca podaną kwotę na konto.
      *
-     * @param amount kwota wpłaty (musi być większa od zera)
-     * @param logger logger rejestrujący przebieg transakcji (może być null)
-     * @throws IllegalArgumentException jeśli kwota wpłaty jest mniejsza lub równa zero
+     * @param amount kwota do wpłaty (musi być większa od zera)
+     * @param logger logger do zapisu transakcji (może być null)
+     * @throws IllegalArgumentException jeśli kwota jest mniejsza lub równa zero
      */
     public void deposit(double amount, TransactionLogger logger) {
         requirePositive(amount, "Kwota wpłaty musi być dodatnia.");
@@ -47,12 +47,12 @@ public abstract class Account implements Auditable {
     }
 
     /**
-     * Dokonuje wypłaty określonej kwoty z konta, jeśli dostępne środki są wystarczające.
-     * W przypadku braku środków operacja jest przerywana, a zdarzenie logowane jako ostrzeżenie.
+     * wypłaca kasę z konta, jeśli są wystarczajace środki.
+     * jak nie ma kasy, to przerywa operacje i loguje ostrzeżenie.
      *
      * @param amount kwota wypłaty (musi być większa od zera)
-     * @param logger logger rejestrujący przebieg transakcji (może być null)
-     * @throws IllegalArgumentException jeśli kwota wypłaty jest mniejsza lub równa zero
+     * @param logger logger do zapisu transakcji (może być null)
+     * @throws IllegalArgumentException jeśli kwota jest mniejsza lub równa zero
      */
     public void withdraw(double amount, TransactionLogger logger) {
         requirePositive(amount, "Kwota wypłaty musi być dodatnia.");
@@ -65,17 +65,17 @@ public abstract class Account implements Auditable {
     }
 
     /**
-     * Przetwarza rozliczenie miesięczne dla konta (np. naliczanie odsetek, opłat).
-     * Sposób przetwarzania zależy od konkretnego typu konta (implementacji podklasy).
+     * przetwarza rozliczenie miesieczne (np. odsetki, opłaty).
+     * zależy to od konkretnego typu konta.
      *
-     * @param logger logger rejestrujący przebieg operacji miesięcznych (może być null)
+     * @param logger logger do zapisu operacji miesięcznych (może być null)
      */
     public abstract void processMonth(TransactionLogger logger);
 
     /**
-     * Przeprowadza audyt stanu konta, zapisując informacje o typie, właścicielu oraz saldzie.
+     * robi audyt konta, zapisując info o typie, właścicielu i saldzie.
      *
-     * @param logger logger wykorzystany do zapisania raportu audytu (może być null)
+     * @param logger logger do zapisu raportu audytu (może być null)
      */
     @Override
     public void audit(TransactionLogger logger) {
@@ -83,10 +83,10 @@ public abstract class Account implements Auditable {
     }
 
     /**
-     * Pomocnicza metoda sprawdzająca, czy podana kwota jest dodatnia.
+     * pomocnicza metoda sprawdzająca czy kwota jest dodatnia.
      *
-     * @param amount  sprawdzana kwota
-     * @param message komunikat błędu wyrzucany w przypadku niespełnienia warunku
+     * @param amount sprawdzana kwota
+     * @param message komunikat o błędzie
      * @throws IllegalArgumentException jeśli kwota jest mniejsza lub równa zero
      */
     protected static void requirePositive(double amount, String message) {
@@ -94,17 +94,17 @@ public abstract class Account implements Auditable {
     }
 
     /**
-     * Formatuje wartość numeryczną do czytelnego ciągu znaków z walutą PLN.
+     * formatuje liczbę do ładnego stringa z walutą PLN.
      *
-     * @param v wartość numeryczna do sformatowania
-     * @return sformatowany ciąg znaków (np. "150.00 PLN")
+     * @param v wartość do sformatowania
+     * @return sformatowany tekst (np. "150.00 PLN")
      */
     protected static String pretty(double v) {
         return String.format("%.2f PLN", v);
     }
 
     /**
-     * Zwraca nazwę właściciela konta.
+     * zwraca nazwę właściciela konta.
      *
      * @return właściciel konta
      */
@@ -113,7 +113,7 @@ public abstract class Account implements Auditable {
     }
 
     /**
-     * Zwraca aktualne saldo na koncie.
+     * zwraca aktualne saldo na koncie.
      *
      * @return aktualne saldo
      */
@@ -122,9 +122,9 @@ public abstract class Account implements Auditable {
     }
 
     /**
-     * Zwraca czytelną reprezentację tekstową obiektu konta.
+     * zwraca tekstową reprezentacje obiektu konta.
      *
-     * @return opis konta w formacie tekstowym
+     * @return opis konta
      */
     @Override
     public String toString() {

@@ -1,21 +1,21 @@
 package pl.bankapp;
 
 /**
- * Reprezentuje konto bieżące (rozliczeniowe), które dziedziczy po klasie {@link Account}.
- * Konto to pobiera dodatkową, stałą opłatę za każdą zrealizowaną wypłatę gotówki.
+ * reprezentuje konto bieżące, które dziedziczy po {@link Account}.
+ * pobiera dodatkową, stałą opłatę za każdą wypłatę gotówki.
  */
 public class CheckingAccount extends Account {
 
-    /** Stała opłata pobierana przy każdej operacji wypłaty. */
+    /** stała opłata pobierana przy każdej wypłacie. */
     private final double withdrawalFee;
 
     /**
-     * Tworzy nowe konto bieżące o określonym właścicielu, saldzie początkowym oraz opłacie za wypłatę.
+     * tworzy nowe konto bieżące z właścicielem, saldem startowym i opłatą za wypłatę.
      *
-     * @param owner          nazwa właściciela konta (nie może być pusta ani null)
-     * @param initialBalance początkowa kwota na koncie (nie może być ujemna)
-     * @param withdrawalFee  opłata pobierana przy każdej wypłacie (nie może być ujemna)
-     * @throws IllegalArgumentException jeśli opłata za wypłatę jest ujemna (walidacja właściciela i salda odbywa się w klasie bazowej)
+     * @param owner nazwa właściciela (nie może być pusta ani null)
+     * @param initialBalance początkowa kasa na koncie (nie może być ujemna)
+     * @param withdrawalFee opłata za wypłatu (nie może być ujemna)
+     * @throws IllegalArgumentException jeśli opłata jest ujemna
      */
     public CheckingAccount(String owner, double initialBalance, double withdrawalFee) {
         super(owner, initialBalance);
@@ -24,13 +24,12 @@ public class CheckingAccount extends Account {
     }
 
     /**
-     * Dokonuje wypłaty określonej kwoty z konta powiększonej o stałą opłatę za wypłatę.
-     * Jeśli suma kwoty wypłaty i opłaty przekracza dostępne saldo, operacja jest odrzucana,
-     * a zdarzenie logowane jako ostrzeżenie.
+     * wypłaca kasę powiększoną o stałą opłatę za wypłate.
+     * jak brakuje środków na kwotę razem z opłatą, to odrzuca transakcje i loguje ostrzeżenie.
      *
      * @param amount kwota wypłaty (musi być większa od zera)
-     * @param logger logger rejestrujący przebieg transakcji (może być null)
-     * @throws IllegalArgumentException jeśli kwota wypłaty jest mniejsza lub równa zero
+     * @param logger logger do zapisu transakcji (może być null)
+     * @throws IllegalArgumentException jeśli kwota jest mniejsza lub równa zero
      */
     @Override
     public void withdraw(double amount, TransactionLogger logger) {
@@ -47,10 +46,10 @@ public class CheckingAccount extends Account {
     }
 
     /**
-     * Przetwarza rozliczenie miesięczne dla konta bieżącego.
-     * W tej implementacji konto nie nalicza automatycznych opłat miesięcznych, co zostaje odpowiednio zahasłowane.
+     * przetwarza rozliczenie miesieczne dla konta bieżącego.
+     * w tym koncie nie ma miesięcznych opłat, więc tylko to loguje.
      *
-     * @param logger logger rejestrujący przebieg operacji miesięcznych (może być null)
+     * @param logger logger do zapisu operacji miesięcznych (może być null)
      */
     @Override
     public void processMonth(TransactionLogger logger) {

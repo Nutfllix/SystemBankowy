@@ -5,22 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Główna klasa aplikacji (punkt startowy programu), która demonstruje działanie
- * systemu bankowego.
  *
- * <p>Tworzy przykładowe konta (oszczędnościowe oraz rozliczeniowe), przeprowadza
- * symulację operacji dziennych (wpłaty, wypłaty, próby wypłaty przekraczające saldo),
- * przetwarza rozliczenia miesięczne oraz wykonuje końcowy audyt stanu kont.</p>
+ * @author Kacper Łupinski
+ * @version 1.0.0
+ * @since 2026-09
  *
- * <p>Wszystkie operacje i zdarzenia są rejestrowane przy użyciu obiektu {@link TransactionLogger},
- * zarządzanego automatycznie w bloku try-with-resources.</p>
+ * główna klasa aplikacji (start programu), która pokazuje jak działa bank.
+ *
+ * <p>tworzy konta, robi wpłaty, wypłaty, próby wypłaty bez kasy,
+ * rozliczenie miesiąca i robi audyt na koniec.</p>
+ *
+ * <p>wszystko loguje sie przez logger w bloku try-with-resources.</p>
  */
 public class Main {
 
     /**
-     * Główna metoda uruchomieniowa aplikacji.
+     * główna metoda uruchamiajaca aplikacje.
      *
-     * @param args argumenty wiersza poleceń (nie używane w tej aplikacji)
+     * @param args argumenty z konsoli (nieużywane)
      */
     public static void main(String[] args) {
         try (TransactionLogger logger = new TransactionLogger("app-session")) {
